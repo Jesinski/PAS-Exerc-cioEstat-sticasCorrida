@@ -37,5 +37,5 @@ public class Corredor {
     public String getGenero() {
         return genero;
     }
-
+    
 }
