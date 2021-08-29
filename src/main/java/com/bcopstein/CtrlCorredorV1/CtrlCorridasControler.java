@@ -25,17 +25,19 @@ public class CtrlCorridasControler implements CorredorRepository, EventoReposito
                                 + "cpf VARCHAR(255), nome VARCHAR(255), genero VARCHAR(255), diaDn int, mesDn int, anoDn int, PRIMARY KEY(cpf))");
 
                 this.jdbcTemplate.batchUpdate(
-                                "INSERT INTO corredores(cpf,nome,genero,diaDn,mesDn,anoDn) VALUES ('10001287','Luiz','masculino',22,5,1987)");
+                                "INSERT INTO corredores(cpf,nome,genero,diaDn,mesDn,anoDn) VALUES ('10001287','Luiz','masculino',22,5,1987)",
+                                "INSERT INTO corredores(cpf,nome,genero,diaDn,mesDn,anoDn) VALUES ('54378796','Gustavo','masculino',28,12,1998)",
+                                "INSERT INTO corredores(cpf,nome,genero,diaDn,mesDn,anoDn) VALUES ('41241244','Carla','feminino',02,8,1995)");
 
                 this.jdbcTemplate.execute("DROP TABLE eventos IF EXISTS");
                 this.jdbcTemplate.execute("CREATE TABLE eventos("
                                 + "id int, nome VARCHAR(255), dia int, mes int, ano int, distancia int, horas int, minutos int, segundos int,PRIMARY KEY(id))");
 
-                /*
-                 * this.jdbcTemplate.batchUpdate(
-                 * "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES"
-                 * + " ('1','Poa Day Run',22,5,2019,5,0,35,32)");
-                 */
+                this.jdbcTemplate.batchUpdate(
+                                "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('1','Poa Day Run',22,5,2019,5,0,35,32)",
+                                "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('2','Poa Night Run',02,7,2020,10,1,10,43)",
+                                "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('3','Poa All Day Run',28,9,2021,7,0,55,44)");
+
         }
 
         @GetMapping("/corredor")
