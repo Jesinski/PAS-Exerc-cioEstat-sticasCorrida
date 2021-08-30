@@ -39,8 +39,8 @@ public class CorridasControlerRepository implements CorredorRepository, EventoRe
 
                 this.jdbcTemplate.batchUpdate(
                                 "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('1','Poa Day Run',22,5,2019,5,0,35,32)",
-                                "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('2','Poa Night Run',02,7,2020,5,1,10,43)",
-                                "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('3','Poa All Day Run',28,9,2021,5,0,55,44)");
+                                "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('2','Poa Night Run',02,7,2019,5,1,10,43)",
+                                "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('3','Poa All Day Run',28,9,2019,5,0,55,44)");
 
         }
 
@@ -74,6 +74,16 @@ public class CorridasControlerRepository implements CorredorRepository, EventoRe
                 return getEstatisticasByDistance(distancia);
         }
 
+        @GetMapping("/aumentoPerformance")
+        @CrossOrigin(origins = "*")
+        public List<Evento> aumentoPerformance(@RequestParam final int distancia, @RequestParam final int ano) {
+                String query = String.format("SELECT * from eventos WHERE distancia = %d AND ano = %d", distancia, ano);
+                List<Evento> resp = this.jdbcTemplate.query(query,
+                                (rs, rowNum) -> new Evento(rs.getInt("id"), rs.getString("nome"), rs.getInt("dia"),
+                                                rs.getInt("mes"), rs.getInt("ano"), rs.getInt("distancia"),
+                                                rs.getInt("horas"), rs.getInt("minutos"), rs.getInt("segundos")));
+                return resp;
+        }
 
         @Override
         public List<Corredor> getCorredores() {
