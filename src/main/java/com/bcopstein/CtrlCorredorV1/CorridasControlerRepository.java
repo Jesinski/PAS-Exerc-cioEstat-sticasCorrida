@@ -2,6 +2,9 @@ package com.bcopstein.CtrlCorredorV1;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,15 +12,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/ctrlCorridas")
-public class CtrlCorridasControler implements CorredorRepository, EventoRepository {
+public class CorridasControlerRepository implements CorredorRepository, EventoRepository, EstatisticasRepository {
         private JdbcTemplate jdbcTemplate;
 
         @Autowired
-        public CtrlCorridasControler(JdbcTemplate jdbcTemplate) {
+        public CorridasControlerRepository(JdbcTemplate jdbcTemplate) {
                 this.jdbcTemplate = jdbcTemplate;
 
                 this.jdbcTemplate.execute("DROP TABLE corredores IF EXISTS");
@@ -35,8 +39,8 @@ public class CtrlCorridasControler implements CorredorRepository, EventoReposito
 
                 this.jdbcTemplate.batchUpdate(
                                 "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('1','Poa Day Run',22,5,2019,5,0,35,32)",
-                                "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('2','Poa Night Run',02,7,2020,10,1,10,43)",
-                                "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('3','Poa All Day Run',28,9,2021,7,0,55,44)");
+                                "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('2','Poa Night Run',02,7,2020,5,1,10,43)",
+                                "INSERT INTO eventos(id,nome,dia,mes,ano,distancia,horas,minutos,segundos) VALUES ('3','Poa All Day Run',28,9,2021,5,0,55,44)");
 
         }
 
@@ -63,6 +67,13 @@ public class CtrlCorridasControler implements CorredorRepository, EventoReposito
         public boolean informaEvento(@RequestBody final Evento evento) {
                 return createEvento(evento);
         }
+
+        @GetMapping("/estatisticas")
+        @CrossOrigin(origins = "*")
+        public EstatisticaDTO estatisticas(@RequestParam final int distancia) {
+                return getEstatisticasByDistance(distancia);
+        }
+
 
         @Override
         public List<Corredor> getCorredores() {
@@ -101,5 +112,16 @@ public class CtrlCorridasControler implements CorredorRepository, EventoReposito
                                 evento.getId(), evento.getNome(), evento.getDia(), evento.getMes(), evento.getAno(),
                                 evento.getDistancia(), evento.getHoras(), evento.getMinutos(), evento.getSegundos());
                 return true;
+        }
+
+        @Override
+        public EstatisticaDTO getEstatisticasByDistance(int distance) {
+                String query = String.format("SELECT * from eventos WHERE distancia = %d", distance);
+                List<Evento> resp = this.jdbcTemplate.query(query,
+                                (rs, rowNum) -> new Evento(rs.getInt("id"), rs.getString("nome"), rs.getInt("dia"),
+                                                rs.getInt("mes"), rs.getInt("ano"), rs.getInt("distancia"),
+                                                rs.getInt("horas"), rs.getInt("minutos"), rs.getInt("segundos")));
+                EstatisticaDTO estatistica = new EstatisticaDTO(resp, distance);
+                return estatistica;
         }
 }
