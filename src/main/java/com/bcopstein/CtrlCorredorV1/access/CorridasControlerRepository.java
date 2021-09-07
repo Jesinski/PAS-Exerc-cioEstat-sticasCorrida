@@ -1,8 +1,12 @@
-package com.bcopstein.CtrlCorredorV1;
+package com.bcopstein.CtrlCorredorV1.access;
 
 import java.util.List;
 
 import javax.websocket.server.PathParam;
+
+import com.bcopstein.CtrlCorredorV1.domain.Corredor;
+import com.bcopstein.CtrlCorredorV1.domain.EstatisticaDTO;
+import com.bcopstein.CtrlCorredorV1.domain.Evento;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

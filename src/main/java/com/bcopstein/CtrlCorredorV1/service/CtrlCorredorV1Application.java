@@ -1,4 +1,4 @@
-package com.bcopstein.CtrlCorredorV1;
+package com.bcopstein.CtrlCorredorV1.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

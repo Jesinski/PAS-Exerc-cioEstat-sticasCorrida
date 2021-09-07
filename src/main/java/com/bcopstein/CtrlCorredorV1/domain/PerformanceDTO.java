@@ -1,4 +1,4 @@
-package com.bcopstein.CtrlCorredorV1;
+package com.bcopstein.CtrlCorredorV1.domain;
 
 import java.util.List;
 
